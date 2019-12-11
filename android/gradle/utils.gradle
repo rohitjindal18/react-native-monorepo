@@ -1,0 +1,41 @@
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
+def getCurrentFlavor() {
+    Gradle gradle = getGradle()
+    String tskReqStr = gradle.getStartParameter().getTaskRequests().toString()
+    Pattern pattern;
+
+    if (tskReqStr.contains("assemble"))
+        pattern = Pattern.compile("assemble(\\w+)(Release|Debug)")
+    else if (tskReqStr.contains("install"))
+        pattern = Pattern.compile("install(\\w+)(Release|Debug)")
+    else
+        pattern = Pattern.compile("generate(\\w+)(Release|Debug)")
+
+    Matcher matcher = pattern.matcher(tskReqStr)
+
+    if (matcher.find())
+        return matcher.group(1)
+    else {
+        println "NO MATCH FOUND"
+        return "";
+    }
+}
+
+def getCurrentAppName(String currentFlavor) {
+    Pattern pattern;
+    pattern = Pattern.compile("(\\w+)(Prod|Preprod|Beta)(\\b)")
+    Matcher matcher = pattern.matcher(currentFlavor)
+    if (matcher.find())
+        return matcher.group(1)
+
+    throw new InvalidUserDataException("No or incorrect environment specified! Pease check!")
+
+}
+
+// Export methods by turning them into closures
+ext {
+    getCurrentFlavor = this.&getCurrentFlavor
+    getCurrentAppName = this.&getCurrentAppName
+}

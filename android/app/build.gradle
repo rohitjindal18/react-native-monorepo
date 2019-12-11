@@ -76,7 +76,6 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-    entryFile: "index.js",
     enableHermes: false,  // clean and rebuild if changing
 ]
 
@@ -119,6 +118,26 @@ def jscFlavor = 'org.webkit:android-jsc:+'
  */
 def enableHermes = project.ext.react.get("enableHermes", false);
 
+apply from: '../gradle/utils.gradle'
+
+def flavorWithEnvironment = getCurrentFlavor()
+println "Current Flavor:" + flavorWithEnvironment
+def currentFlavor = getCurrentAppName(flavorWithEnvironment)
+println "Current App:" + currentFlavor
+def jsonFile
+try {
+    def inputFile = new File("" + projectDir.getAbsolutePath() + "/../../configs/" + currentFlavor + ".json")
+    jsonFile = new groovy.json.JsonSlurper().parseText(inputFile.text)
+    println "Current File:" + inputFile.getAbsolutePath()
+}
+catch (Exception e) {
+    throw new InvalidUserDataException("No Such App Present! Please check the name of App in Config File of App or the react-native command")
+}
+
+jsonFile.plugins.each {
+    apply plugin: it
+}
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
@@ -131,8 +150,9 @@ android {
         applicationId "com.reactnativemonorepo"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        manifestPlaceholders = [appName: jsonFile.apkName]
+        versionCode jsonFile.versionCode
+        versionName jsonFile.versionName
     }
     splits {
         abi {
@@ -150,16 +170,66 @@ android {
             keyPassword 'android'
         }
     }
-    buildTypes {
-        debug {
-            signingConfig signingConfigs.debug
+      buildTypes {
+        jsonFile.buildTypes.each {
+            buildTypeObject ->
+                "$buildTypeObject.type" {
+                    applicationIdSuffix buildTypeObject.applicationIdSuffix
+                    debuggable buildTypeObject.debuggable
+                    minifyEnabled buildTypeObject.minifyEnabled
+                    useProguard buildTypeObject.useProguard
+                    manifestPlaceholders = [typeLabel: buildTypeObject.typeLabel]
+                    applicationIdSuffix = buildTypeObject.applicationIdSuffix
+                    shrinkResources buildTypeObject.shrinkResources
+                    if (buildTypeObject.setProguard)
+                        proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+                    if (buildTypeObject.type.equals("release")) {
+                        signingConfig signingConfigs.release
+                    }
+                }
         }
-        release {
-            // Caution! In production, you need to generate your own keystore file.
-            // see https://facebook.github.io/react-native/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
-            minifyEnabled enableProguardInReleaseBuilds
-            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+    }
+
+    flavorDimensions "app", "environment"
+    productFlavors {
+        def flavorName = jsonFile.appName.toLowerCase()
+        "$flavorName" {
+            versionCode jsonFile.versionCode
+            versionName "$jsonFile.versionName"
+            def appId = "$jsonFile.applicationId"
+            if (!appId?.trim()) {
+                def suffixId = "$jsonFile.appName"
+                applicationIdSuffix suffixId.toLowerCase()
+            } else {
+                applicationId "$jsonFile.applicationId"
+            }
+            dimension "app"
+        }
+
+        jsonFile.environment.each {
+            println "prodct flavor: " + it.name
+            def buildconfigFieldsArray = it.buildConfigField
+            def manifestConstantsMap = it.manifestConstants
+            def appSuffixId = it.applicationIdSuffix
+            "$it.name" {
+                dimension "environment"
+                manifestPlaceholders manifestConstantsMap
+                if (appSuffixId?.trim()) {
+                    applicationIdSuffix appSuffixId
+                    println "applicationIdSuffix-" + applicationIdSuffix
+                }
+                buildconfigFieldsArray.each {
+                    constantFields ->
+                        println "constantFields: " + constantFields
+                        if (constantFields.type.equals("String")) {
+                            buildConfigField constantFields.type, constantFields.fieldName, "\"$constantFields.value\""
+                        } else {
+                            buildConfigField constantFields.type, constantFields.fieldName, constantFields.value
+                        }
+
+                }
+
+            }
         }
     }
     // applicationVariants are e.g. debug, release
@@ -189,7 +259,18 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+     jsonFile.dependencies.implementation.each {
+        implementation "$it"
+    }
+    jsonFile.dependencies.implementationProject.each {
+        implementation project("$it")
+    }
 }
+
+project.ext.react = [
+        entryFile: projectDir.getAbsolutePath() + "../../../src/apps/" + jsonFile.appName + "/index.js"
+]
 
 // Run this once to be able to run the application with BUCK
 // puts all compile dependencies into folder libs for BUCK to use
