@@ -247,6 +247,14 @@ const sampleConfigJson = appName => `
 }
 `;
 
+const packageJson = appName => `{
+  "name": "${appName}",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {}
+}
+`;
+
 module.exports = {
   activity,
   application,
@@ -255,4 +263,5 @@ module.exports = {
   sampleComponent,
   registry,
   sampleConfigJson,
+  packageJson,
 };

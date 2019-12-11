@@ -8,9 +8,11 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "create-app": "node ./scripts/create-new-app.js"
+    "create-app": "node ./scripts/create-new-app.js",
+    "bootstrap": "rm -rf node_modules && yarn install && node ./scripts/createLinks.js"
   },
   "dependencies": {
+    "@lerna/create-symlink": "^3.16.2",
     "react": "16.9.0",
     "react-native": "0.61.5"
   },

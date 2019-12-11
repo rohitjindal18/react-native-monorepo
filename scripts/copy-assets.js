@@ -10,6 +10,7 @@ const {
   sampleComponent,
   registry,
   sampleConfigJson,
+  packageJson,
 } = require('./activity-templates'); // eslint-disable-line @typescript-eslint/no-var-requires
 
 const JAVA_SRC_PATH = path.resolve(__dirname, '..', 'android', 'app', 'src');
@@ -74,6 +75,8 @@ const copy = async ({ appName }) => {
     sampleComponent(appName),
   );
   createFileSync(`${JS_SRC_PATH}/${appName}`)('index.js', registry(appName));
+
+  createFileSync(`${JS_SRC_PATH}/${appName}`)('package.json', packageJson(appName));
 
   // 7. create config file
   createFileSync(CONFIG_PATH)(`${appName}.json`, sampleConfigJson(appName));
