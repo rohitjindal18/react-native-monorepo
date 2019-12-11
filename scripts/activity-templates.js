@@ -180,7 +180,7 @@ const sampleConfigJson = appName => `
   "versionName": "1.0.0",
   "applicationId": "",
   "codepushAppName": "",
-  "apkName": "",
+  "apkName": "${appName}",
   "plugins": [],
   "dependencies": {
     "implementation": [],
