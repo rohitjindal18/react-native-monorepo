@@ -206,7 +206,7 @@ const sampleConfigJson = appName => `
       "manifestConstants": {
         "cleverTapAccountId": "",
         "cleverTapToken": "",
-        "environmentLabel": "[STAGE]"
+        "environmentLabel": "[preprod]"
       },
       "applicationIdSuffix": ".preprod"
     },
@@ -242,6 +242,16 @@ const sampleConfigJson = appName => `
       "setProguard": false,
       "shrinkResources": false,
       "typeLabel": "[DEBUG]"
+    },
+    {
+      "type": "release",
+      "applicationIdSuffix": ".release",
+      "versionNameSuffix": "-RELEASE",
+      "minifyEnabled": true,
+      "useProguard": true,
+      "setProguard": true,
+      "shrinkResources": true,
+      "typeLabel": "[RELEASE]"
     }
   ]
 }

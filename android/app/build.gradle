@@ -75,11 +75,6 @@ import com.android.build.OutputFile
  * ]
  */
 
-project.ext.react = [
-    enableHermes: false,  // clean and rebuild if changing
-]
-
-apply from: "../../node_modules/react-native/react.gradle"
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -89,7 +84,7 @@ apply from: "../../node_modules/react-native/react.gradle"
  * Upload all the APKs to the Play Store and people will download
  * the correct one based on the CPU architecture of their device.
  */
-def enableSeparateBuildPerCPUArchitecture = false
+def enableSeparateBuildPerCPUArchitecture = true
 
 /**
  * Run Proguard to shrink the Java bytecode in release builds.
@@ -116,7 +111,7 @@ def jscFlavor = 'org.webkit:android-jsc:+'
  * on project.ext.react, JavaScript will not be compiled to Hermes Bytecode
  * and the benefits of using Hermes will therefore be sharply reduced.
  */
-def enableHermes = project.ext.react.get("enableHermes", false);
+// def enableHermes = project.ext.react.get("enableHermes", false);
 
 apply from: '../gradle/utils.gradle'
 
@@ -146,11 +141,18 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    dexOptions {
+        preDexLibraries = false
+        javaMaxHeapSize "4g"
+        jumboMode = true
+    }
+
     defaultConfig {
         applicationId "com.reactnativemonorepo"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         manifestPlaceholders = [appName: jsonFile.apkName]
+        multiDexEnabled true
         versionCode jsonFile.versionCode
         versionName jsonFile.versionName
     }
@@ -164,6 +166,12 @@ android {
     }
     signingConfigs {
         debug {
+            storeFile file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+        release {
             storeFile file('debug.keystore')
             storePassword 'android'
             keyAlias 'androiddebugkey'
@@ -239,10 +247,11 @@ android {
             // https://developer.android.com/studio/build/configure-apk-splits.html
             def versionCodes = ["armeabi-v7a": 1, "x86": 2, "arm64-v8a": 3, "x86_64": 4]
             def abi = output.getFilter(OutputFile.ABI)
-            if (abi != null) {  // null for the universal-debug, universal-release variants
-                output.versionCodeOverride =
-                        versionCodes.get(abi) * 1048576 + defaultConfig.versionCode
-            }
+            // if (abi != null) {  // null for the universal-debug, universal-release variants
+            //     output.versionCodeOverride =
+            //             versionCodes.get(abi) * 1048576 + defaultConfig.versionCode
+            // }
+            // output.outputFileName = output.outputFile.name.replace("app-" + jsonFile.appName.toLowerCase() + "-", "${jsonFile.apkName}-${variant.versionName}-")
 
         }
     }
@@ -252,7 +261,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
-    if (enableHermes) {
+    if (true) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
         debugImplementation files(hermesPath + "hermes-debug.aar")
         releaseImplementation files(hermesPath + "hermes-release.aar")
@@ -269,8 +278,16 @@ dependencies {
 }
 
 project.ext.react = [
-        entryFile: projectDir.getAbsolutePath() + "../../../src/apps/" + jsonFile.appName + "/index.js"
+    enableHermes: true,  // clean and rebuild if changing
+    bundleInRelease: true,
+    bundleInDebug: false,
+    jsBundleDirRelease: "$buildDir/generated/assets/react/release",
+    jsBundleDirDebug: "$buildDir/generated/assets/react/debug",
+    entryFile: projectDir.getAbsolutePath() + "../../../src/apps/" + jsonFile.appName + "/index.js"
 ]
+
+apply from: "../../node_modules/react-native/react.gradle"
+apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 
 // Run this once to be able to run the application with BUCK
 // puts all compile dependencies into folder libs for BUCK to use
@@ -279,4 +296,3 @@ task copyDownloadableDepsToLibs(type: Copy) {
     into 'libs'
 }
 
-apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

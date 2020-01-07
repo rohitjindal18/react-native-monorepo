@@ -1,0 +1,82 @@
+
+{
+  "appName": "sellerapp",
+  "versionName": "1.0.0",
+  "applicationId": "",
+  "codepushAppName": "",
+  "apkName": "sellerapp",
+  "plugins": [],
+  "dependencies": {
+    "implementation": [],
+    "implementationProject": []
+  },
+  "applyGradle": [],
+  "vectorIcons": [],
+  "environment": [
+    {
+      "name": "preprod",
+      "buildConfigField": [
+        {
+          "type": "String",
+          "fieldName": "APP_BASE_URL",
+          "value": ""
+        },
+        {
+          "type": "String",
+          "fieldName": "CODEPUSH_DEPLOYMENT_KEY",
+          "value": ""
+        }
+      ],
+      "manifestConstants": {
+        "cleverTapAccountId": "",
+        "cleverTapToken": "",
+        "environmentLabel": "[preprod]"
+      },
+      "applicationIdSuffix": ".preprod"
+    },
+    {
+      "name": "prod",
+      "buildConfigField": [
+        {
+          "type": "String",
+          "fieldName": "APP_BASE_URL",
+          "value": ""
+        },
+        {
+          "type": "String",
+          "fieldName": "CODEPUSH_DEPLOYMENT_KEY",
+          "value": ""
+        }
+      ],
+      "manifestConstants": {
+        "cleverTapAccountId": "",
+        "cleverTapToken": "",
+        "environmentLabel": ""
+      }
+    }
+  ],
+  "buildTypes": [
+    {
+      "type": "debug",
+      "applicationIdSuffix": ".debug",
+      "debuggable": true,
+      "versionNameSuffix": "-DEBUG",
+      "minifyEnabled": false,
+      "useProguard": false,
+      "setProguard": false,
+      "shrinkResources": false,
+      "typeLabel": "[DEBUG]"
+    },
+    {
+      "type": "release",
+      "applicationIdSuffix": ".release",
+      "versionNameSuffix": "-RELEASE",
+      "minifyEnabled": true,
+      "useProguard": true,
+      "debuggable": false,
+      "setProguard": true,
+      "shrinkResources": true,
+      "typeLabel": "[RELEASE]"
+    }
+  ]
+}
