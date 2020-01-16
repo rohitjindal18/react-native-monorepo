@@ -28,6 +28,7 @@
 # Do not strip any method/class that is annotated with @DoNotStrip
 -keep @com.facebook.proguard.annotations.DoNotStrip class *
 -keep @com.facebook.common.internal.DoNotStrip class *
+-keep class com.facebook.hermes.unicode.** { *; }
 -keepclassmembers class * {
     @com.facebook.proguard.annotations.DoNotStrip *;
     @com.facebook.common.internal.DoNotStrip *;
