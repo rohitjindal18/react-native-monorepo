@@ -9,6 +9,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+import com.microsoft.codepush.react.CodePush;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +26,7 @@ public class customerMainApplication extends Application implements ReactApplica
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                 new MainReactPackage(),
+                new CodePush("TfAg2qQd3vruasEA-nPlOk3YIHCCiF7NQUO0T", getApplicationContext(), BuildConfig.DEBUG),
                 new RNGestureHandlerPackage()
             );
         }
@@ -32,6 +34,11 @@ public class customerMainApplication extends Application implements ReactApplica
         @Override
         protected String getJSMainModuleName() {
             return "./src/apps/customerApp/index";
+        }
+
+        @Override
+        protected String getJSBundleFile() {
+            return CodePush.getJSBundleFile();
         }
     };
 

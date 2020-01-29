@@ -57,7 +57,7 @@ class BlueScreen extends Component {
         <TouchableHighlight
           style={styles.button}
           onPress={() => this.props.navigation.navigate('RedScreen')}>
-          <Text style={styles.text}>Go to Red</Text>
+          <Text style={styles.text}>Go to Red 123</Text>
         </TouchableHighlight>
       </View>
     );

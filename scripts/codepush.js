@@ -67,10 +67,10 @@ const fse = require('fs-extra');
       console.error("App isn't codepush enabled!");
       process.exit(1);
     }
-    const codepush = `code-push release-react EKART-CITY-LOGISTICS/${config.codepushAppName} android -m --description "${response.message}" --entryFile ./src/apps/${config.appName}/index.js --targetBinaryVersion ${config.versionName}`;
+    const codepush = `appcenter codepush release-react --debug -a jindal.rohit018-gmail.com/customerapp-1 -d Production --entry-file ./src/apps/${config.appName}/index.js`;
     exec(codepush, (e, o, r) => {
       if (!e) 'Code push done.';
-      else console.error(e);
+      else console.error(e, o, r);
     });
   });
 })();

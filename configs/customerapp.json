@@ -4,13 +4,16 @@
   "versionName": "1.0.0",
   "versionCode": 1,
   "applicationId": "",
-  "codepushAppName": "",
-  "apkName": "customerApp",
+  "codepushAppName": "customerApp",
+  "apkName": "customerapp",
   "plugins": [],
   "dependencies": {
     "implementation": [
     ],
-    "implementationProject": []
+    "implementationProject": [
+      ":react-native-gesture-handler",
+      ":react-native-code-push"
+    ]
   },
   "applyGradle": [],
   "vectorIcons": [],
@@ -26,7 +29,7 @@
         {
           "type": "String",
           "fieldName": "CODEPUSH_DEPLOYMENT_KEY",
-          "value": ""
+          "value": "liyKasGgVOONjuLj7nJiT-FERdqgIaVfUE_RL"
         }
       ],
       "manifestConstants": {
@@ -47,13 +50,13 @@
         {
           "type": "String",
           "fieldName": "CODEPUSH_DEPLOYMENT_KEY",
-          "value": ""
+          "value": "liyKasGgVOONjuLj7nJiT-FERdqgIaVfUE_RL"
         }
       ],
       "manifestConstants": {
         "cleverTapAccountId": "",
         "cleverTapToken": "",
-        "environmentLabel": ""
+        "environmentLabel": "[PRODUCTION]"
       }
     }
   ],
