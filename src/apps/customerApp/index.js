@@ -1,4 +1,4 @@
-
+import 'react-native-gesture-handler';
 import {AppRegistry} from 'react-native';
 import App from './Root';
 import CodePush from 'react-native-code-push';

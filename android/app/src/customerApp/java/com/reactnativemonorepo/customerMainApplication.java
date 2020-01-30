@@ -10,6 +10,7 @@ import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.microsoft.codepush.react.CodePush;
+import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +28,8 @@ public class customerMainApplication extends Application implements ReactApplica
             return Arrays.<ReactPackage>asList(
                 new MainReactPackage(),
                 new CodePush("TfAg2qQd3vruasEA-nPlOk3YIHCCiF7NQUO0T", getApplicationContext(), BuildConfig.DEBUG),
-                new RNGestureHandlerPackage()
+                new RNGestureHandlerPackage(),
+                new SafeAreaContextPackage()
             );
         }
 
