@@ -11,8 +11,8 @@
     "implementation": [
     ],
     "implementationProject": [
-      ":react-native-gesture-handler",
-      ":react-native-code-push"
+      ":react-native-code-push:react-native-gesture-handler",
+      ""
     ]
   },
   "applyGradle": [],

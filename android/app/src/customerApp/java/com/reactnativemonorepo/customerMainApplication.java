@@ -10,7 +10,17 @@ import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.microsoft.codepush.react.CodePush;
+import com.swmansion.rnscreens.RNScreensPackage;
+import com.swmansion.rnscreens.ScreenContainerViewManager;
+import com.swmansion.rnscreens.ScreenStackHeaderConfigViewManager;
+import com.swmansion.rnscreens.ScreenStackHeaderSubviewManager;
+import com.swmansion.rnscreens.ScreenStackViewManager;
+import com.swmansion.rnscreens.ScreenViewManager;
 import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
+import com.facebook.react.bridge.NativeModule;
+import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.uimanager.ViewManager;
+import com.bottomsheetbehavior.BottomSheetBehaviorPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,10 +36,12 @@ public class customerMainApplication extends Application implements ReactApplica
         @Override
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
-                new MainReactPackage(),
-                new CodePush("TfAg2qQd3vruasEA-nPlOk3YIHCCiF7NQUO0T", getApplicationContext(), BuildConfig.DEBUG),
-                new RNGestureHandlerPackage(),
-                new SafeAreaContextPackage()
+                    new MainReactPackage(),
+                    new CodePush("TfAg2qQd3vruasEA-nPlOk3YIHCCiF7NQUO0T", getApplicationContext(), BuildConfig.DEBUG),
+                    new RNGestureHandlerPackage(),
+                    new SafeAreaContextPackage(),
+                    new RNScreensPackage(),
+                    new BottomSheetBehaviorPackage()
             );
         }
 
