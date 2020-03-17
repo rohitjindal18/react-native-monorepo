@@ -1,10 +1,10 @@
 import React from 'react';
 import {View, Text} from 'react-native';
-import {App} from './navigation/index';
+// import App from './navigation/index';
 
-import {enableScreens} from 'react-native-screens';
+// import {enableScreens} from 'react-native-screens';
 
-enableScreens();
+// enableScreens();
 
 export default class App1 extends React.Component {
   state = {
@@ -12,6 +12,6 @@ export default class App1 extends React.Component {
   };
 
   render() {
-    return <App/>;
+    return <View><Text>rohit</Text></View>;
   }
 }
